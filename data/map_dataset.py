@@ -63,10 +63,8 @@ class MapDataset(BaseDataset):
 
             return {'A': A, 'B': B, 'A_paths': AB_path, 'B_paths': AB_path}
         elif self.phase == 'val':
-            w, h = AB.size
-            w2 = int(w / 2)
-            A = AB.crop((0, 0, w2, h))
-            B = AB.crop((w2, 0, w, h))
+            A = AB
+            B = Image.open(AB_path).convert('RGB')
 
             # apply the same transform to both A and B
             transform_params = get_params(self.opt, A.size)
