@@ -5,7 +5,7 @@ from PIL import Image
 import random
 
 import ipdb
-
+import re
 
 
 class MapDataset(BaseDataset):
@@ -63,8 +63,9 @@ class MapDataset(BaseDataset):
 
             return {'A': A, 'B': B, 'A_paths': AB_path, 'B_paths': AB_path}
         elif self.phase == 'val':
+            B_path = re.sub('val','val_tgt',AB_path)
             A = AB
-            B = Image.open(AB_path).convert('RGB')
+            B = Image.open(B_path).convert('RGB')
 
             # apply the same transform to both A and B
             transform_params = get_params(self.opt, A.size)
@@ -74,7 +75,7 @@ class MapDataset(BaseDataset):
             A = A_transform(A)
             B = B_transform(B)
 
-            return {'A': A, 'B': B, 'A_paths': AB_path, 'B_paths': AB_path}            
+            return {'A': A, 'B': B, 'A_paths': AB_path, 'B_paths': B_path}            
 
     def __len__(self):
         """Return the total number of images in the dataset."""
